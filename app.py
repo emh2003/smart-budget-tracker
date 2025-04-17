@@ -4,8 +4,10 @@ import os
 import requests
 import plotly.express as px
 os.makedirs("data", exist_ok=True)
-FMP_API_KEY = "s3T8DnspxvZxL7wyAdQs1RViX2iLIkJs"
-FRED_API_KEY = "430538bf0bfa680d2831a784631022fc"
+
+FMP_API_KEY = os.getenv("FMP_API_KEY")
+FRED_API_KEY = os.getenv("FRED_API_KEY")
+
 
 # Set page config
 st.set_page_config(page_title="Smart Budgeting Tool", layout="centered")
