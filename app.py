@@ -15,15 +15,23 @@ st.title("💸 Smart Budgeting and Expense Tracker")
 
 # Sidebar navigation
 menu = ["Home", "Add Transaction", "View Summary", "Settings"]
-choice = st.sidebar.selectbox("Menu", menu)
+choice = st.sidebar.radio("Navigate to:", menu)
 
 # File path for storing transactions
 file_path = "data/transactions.csv"
 
 # Home page
 if choice == "Home":
-    st.subheader("Welcome to your personal finance dashboard! 👋")
-    st.write("Use the sidebar to navigate through the app.")
+    st.markdown("## 👋 Welcome to the Smart Budgeting & Expense Tracker")
+    st.markdown("""
+    This interactive dashboard helps you:
+    - 🧾 Track income and expenses
+    - 🎯 Set and monitor savings goals
+    - 📊 Visualize your spending and budgeting
+    - 🌍 Explore real economic indicators
+
+    Use the sidebar to get started! ⬅️
+    """)
 
 # Add Transaction page
 elif choice == "Add Transaction":
