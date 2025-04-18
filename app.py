@@ -177,8 +177,14 @@ elif choice == "View Summary":
         # Monthly Income vs. Net Savings
         st.markdown("---")
         st.subheader("📈 Monthly Income vs. Net Savings")
-        df['YearMonth'] = df['Date'].dt.strftime("%b %Y")
-        summary_monthly = df.pivot_table(index='YearMonth', columns='Category', values='Amount', aggfunc='sum').fillna(0)
+        df['YearMonth'] = df['Date'].dt.strftime("%Y-%m")
+        summary_monthly = df.pivot_table(
+            index='YearMonth',
+            columns='Category',
+            values='Amount',
+            aggfunc='sum'
+        ).fillna(0)
+
 
         if 'Income' in summary_monthly.columns:
             summary_monthly['Net'] = summary_monthly['Income'] - summary_monthly.drop('Income', axis=1).sum(axis=1)
