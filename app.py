@@ -174,6 +174,7 @@ elif choice == "View Summary":
                       delta=f"${monthly_budget - this_month_expenses:,.2f}")
             st.write(f"{status_icon} **You are {'within' if budget_status else 'over'} your budget!**")
 
+        # Monthly Income vs. Net Savings
         st.markdown("---")
         st.subheader("📈 Monthly Income vs. Net Savings")
         df['YearMonth'] = df['Date'].dt.to_period('M').astype(str)
@@ -184,47 +185,56 @@ elif choice == "View Summary":
         else:
             summary_monthly['Net'] = -summary_monthly.sum(axis=1)
 
-        line_chart = px.line(
-            summary_monthly.reset_index(),
-            x="YearMonth",
-            y=["Income", "Net"],
-            title="Monthly Income and Net Savings",
-            markers=True
-        )
-        st.plotly_chart(line_chart)
+        with st.expander("📈 View Monthly Income and Net Savings Chart", expanded=True):
+            line_chart = px.line(
+                summary_monthly.reset_index(),
+                x="YearMonth",
+                y=["Income", "Net"],
+                title="Monthly Income and Net Savings",
+                markers=True,
+                labels={"Income": "Total Income", "Net": "Net Savings", "YearMonth": "Month"},
+                hover_data={"Income": ":.2f", "Net": ":.2f"}
+            )
+            line_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
+            st.plotly_chart(line_chart)
 
+        # Net Savings Over Time
         st.markdown("---")
         st.subheader("📉 Net Savings Over Time")
         net_trend = summary_monthly.reset_index()[['YearMonth', 'Net']]
         net_trend['YearMonth'] = pd.to_datetime(net_trend['YearMonth'])
 
-        net_line = px.line(
-            net_trend,
-            x="YearMonth",
-            y="Net",
-            markers=True,
-            title="Net Savings Trend"
-        )
-        st.plotly_chart(net_line)
+        with st.expander("📉 View Net Savings Trend", expanded=False):
+            net_line = px.line(
+                net_trend,
+                x="YearMonth",
+                y="Net",
+                markers=True,
+                title="Net Savings Trend Over Time",
+                labels={"YearMonth": "Month", "Net": "Net Savings"},
+                hover_data={"Net": ":.2f"}
+            )
+            net_line.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
+            st.plotly_chart(net_line)
 
+        # Monthly Expenses Breakdown
         st.subheader("📅 Monthly Expenses Breakdown")
         monthly_exp = df[df['Category'] != 'Income']
-
-        # Format YearMonth as 'Apr 2025'
         monthly_exp['YearMonth'] = monthly_exp['Date'].dt.strftime("%b %Y")
-
-        # Group and summarize
         bar_data = monthly_exp.groupby('YearMonth')['Amount'].sum().abs().reset_index()
-        bar_chart = px.bar(
-        bar_data,
-        x=bar_data["YearMonth"].astype(str),  # Force as string
-        y="Amount",
-        text_auto=True,
-        title="Monthly Expenses"
-    )
-        bar_chart.update_layout(xaxis_title="Month", yaxis_title="Amount")
 
-        st.plotly_chart(bar_chart)
+        with st.expander("📊 View Monthly Expenses Chart", expanded=False):
+            bar_chart = px.bar(
+                bar_data,
+                x=bar_data["YearMonth"].astype(str),
+                y="Amount",
+                text_auto=True,
+                title="Monthly Expenses",
+                labels={"YearMonth": "Month", "Amount": "Expenses ($)"},
+                hover_data={"Amount": ":.2f"}
+            )
+            bar_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
+            st.plotly_chart(bar_chart)
 
         st.markdown("---")
         st.subheader("🗑️ Manage Transactions")
