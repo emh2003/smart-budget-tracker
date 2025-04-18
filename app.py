@@ -165,15 +165,20 @@ elif choice == "View Summary":
 
         st.markdown("---")
         st.subheader("📈 Monthly Income vs. Net Savings")
+
+        # ✅ Melt to long format for multi-line chart
+        long_df = summary_monthly[["Income", "Net"]].reset_index().melt(id_vars="YearMonth", var_name="Metric", value_name="Value")
+
         with st.expander("📈 View Monthly Income and Net Savings Chart", expanded=True):
             line_chart = px.line(
-                summary_monthly,
-                x=summary_monthly.index,
-                y=["Income", "Net"],
+                long_df,
+                x="YearMonth",
+                y="Value",
+                color="Metric",
                 title="Monthly Income and Net Savings",
                 markers=True,
-                labels={"x": "Month", "value": "Amount ($)", "variable": "Metric"},
-                hover_data={"Income": ":.2f", "Net": ":.2f"}
+                labels={"YearMonth": "Month", "Value": "Amount ($)", "Metric": "Type"},
+                hover_data={"Value": ":.2f"}
             )
             line_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
             st.plotly_chart(line_chart)
