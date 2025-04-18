@@ -143,17 +143,18 @@ elif choice == "View Summary":
 
         with st.expander("📈 View Monthly Income and Net Savings Chart", expanded=True):
             line_chart = px.line(
-                summary_monthly.reset_index(),
-                x="YearMonth",
-                category_orders={"YearMonth": sorted(summary_monthly.index)},
-                y=["Income", "Net"],
-                title="Monthly Income and Net Savings",
-                markers=True,
-                labels={"Income": "Total Income", "Net": "Net Savings", "YearMonth": "Month"},
-                hover_data={"Income": ":.2f", "Net": ":.2f"}
+            summary_monthly.reset_index(),
+            x="YearMonth",
+            y=["Income", "Net"],
+            title="Monthly Income and Net Savings",
+            markers=True,
+            labels={"Income": "Total Income", "Net": "Net Savings", "YearMonth": "Month"},
+            hover_data={"Income": ":.2f", "Net": ":.2f"},
+            category_orders={"YearMonth": sorted(summary_monthly.index)}
             )
-            line_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
-            st.plotly_chart(line_chart)
+        line_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
+        st.plotly_chart(line_chart)
+
 
         st.subheader("📅 Monthly Expenses Breakdown")
         monthly_exp = df[df['Category'] != 'Income']
