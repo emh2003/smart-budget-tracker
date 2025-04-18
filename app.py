@@ -134,33 +134,41 @@ elif choice == "View Summary":
 
         st.markdown("---")
         st.subheader("📈 Monthly Income vs. Net Savings")
+    # Format YearMonth
         df['YearMonth'] = df['Date'].dt.strftime("%Y-%m")
-        summary_monthly = df.pivot_table(index='YearMonth', columns='Category', values='Amount', aggfunc='sum').fillna(0)
-        if 'Income' in summary_monthly.columns:
-            summary_monthly['Net'] = summary_monthly['Income'] - summary_monthly.drop('Income', axis=1).sum(axis=1)
-        else:
-            summary_monthly['Net'] = -summary_monthly.sum(axis=1)
 
-        with st.expander("📈 View Monthly Income and Net Savings Chart", expanded=True):
-            line_chart = px.line(
-            summary_monthly.reset_index(),
-            x="YearMonth",
-            y=["Income", "Net"],
-            title="Monthly Income and Net Savings",
-            markers=True,
-            labels={"Income": "Total Income", "Net": "Net Savings", "YearMonth": "Month"},
-            hover_data={"Income": ":.2f", "Net": ":.2f"},
-            category_orders={"YearMonth": sorted(summary_monthly.index)}
-            )
-        line_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
-        st.plotly_chart(line_chart)
+    # Build pivot
+    summary_monthly = df.pivot_table(index='YearMonth', columns='Category', values='Amount', aggfunc='sum').fillna(0)
 
+    # Compute Net
+    if 'Income' in summary_monthly.columns:
+        summary_monthly['Net'] = summary_monthly['Income'] - summary_monthly.drop('Income', axis=1).sum(axis=1)
+    else:
+        summary_monthly['Net'] = -summary_monthly.sum(axis=1)
 
-        st.subheader("📅 Monthly Expenses Breakdown")
-        monthly_exp = df[df['Category'] != 'Income']
-        monthly_exp['YearMonth'] = monthly_exp['Date'].dt.strftime("%b %Y")
-        bar_data = monthly_exp.groupby('YearMonth')['Amount'].sum().abs().reset_index()
-        with st.expander("📊 View Monthly Expenses Chart", expanded=False):
+    # Reset index and make sure YearMonth is a string for plotting
+    summary_monthly.index = summary_monthly.index.astype(str)
+    summary_monthly = summary_monthly.sort_index()
+
+    # Build line chart
+    with st.expander("📈 View Monthly Income and Net Savings Chart", expanded=True):
+        line_chart = px.line(
+        summary_monthly,
+        x=summary_monthly.index,
+        y=["Income", "Net"],
+        title="Monthly Income and Net Savings",
+        markers=True,
+        labels={"x": "Month", "value": "Amount ($)", "variable": "Metric"},
+        hover_data={"Income": ":.2f", "Net": ":.2f"}
+    )
+    line_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
+    st.plotly_chart(line_chart)
+
+    st.subheader("📅 Monthly Expenses Breakdown")
+    monthly_exp = df[df['Category'] != 'Income']
+    monthly_exp['YearMonth'] = monthly_exp['Date'].dt.strftime("%b %Y")
+    bar_data = monthly_exp.groupby('YearMonth')['Amount'].sum().abs().reset_index()
+    with st.expander("📊 View Monthly Expenses Chart", expanded=False):
             bar_chart = px.bar(
                 bar_data,
                 x=bar_data["YearMonth"].astype(str),
@@ -173,12 +181,12 @@ elif choice == "View Summary":
             bar_chart.update_layout(xaxis_title="Month", yaxis_title="Amount ($)")
             st.plotly_chart(bar_chart)
 
-        st.markdown("---")
-        st.subheader("📤 Export Transactions")
-        if not df.empty:
+    st.markdown("---")
+    st.subheader("📤 Export Transactions")
+    if not df.empty:
             csv = df.to_csv(index=False).encode("utf-8")
             st.download_button("📥 Download Transactions as CSV", csv, "transactions.csv", "text/csv")
-        else:
+    else:
             st.info("No data available to export.")
 
 # --- MARKET INSIGHTS ---
