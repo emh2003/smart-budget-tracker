@@ -145,6 +145,7 @@ elif choice == "View Summary":
             line_chart = px.line(
                 summary_monthly.reset_index(),
                 x="YearMonth",
+                category_orders={"YearMonth": sorted(summary_monthly.index)},
                 y=["Income", "Net"],
                 title="Monthly Income and Net Savings",
                 markers=True,
