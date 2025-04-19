@@ -1,94 +1,117 @@
-# 💸 Smart Budgeting and Expense Tracker
+# 💸 Smart Budgeting & Expense Tracker
 
-An interactive financial dashboard built in **Streamlit** for personal budgeting, expense tracking, savings goals, and macroeconomic insights. Designed for ease-of-use, visualization, and practical utility.
+An interactive personal finance dashboard built with **Streamlit**, designed to help users:
 
----
-
-## 🚀 Features
-
-### 🔹 Transaction Management
-- Add, view, edit, or delete income and expenses
-- Upload transactions from CSV
-- Download full transaction history as CSV
-
-### 🔹 Visual Dashboards
-- Pie chart of expenses by category
-- Income vs. Expenses over time
-- Net savings and monthly budget compliance
-
-### 🔹 Savings & Budget Tools
-- Set and track savings goals
-- Monitor monthly spending vs. budget
-
-### 🔹 Market Insights (FMP + FRED API)
-- Stock quotes for AAPL, MSFT, WMT
-- U.S. Inflation Rate (CPI)
-- Federal Funds Rate
-- Unemployment Rate
-- Real U.S. GDP (chained 2012 dollars)
+- 🧾 Track income and spending
+- 🎯 Set savings goals and monitor progress
+- 📊 Visualize spending trends and budgeting compliance
+- 🌍 Explore real-time market insights and economic indicators
 
 ---
 
-## ⚙️ How to Run Locally
+## 🚀 Live App
 
-### 📦 1. Clone this repository:
+👉 [Launch the Streamlit App] (https://smart-budget-tracker-dyjcxnhxmq34zdn5eytner.streamlit.app/) 
+
+---
+
+## 🧩 Features
+
+### 💰 Budget Tracking
+- Add income and expense transactions manually
+- Upload transactions via CSV
+- Categorize expenses for visual analysis
+
+### 📈 Financial Summary Dashboard
+- Monthly income vs. net savings line chart
+- Spending by category pie chart
+- Monthly expenses bar chart
+- Savings goal progress tracker
+- Monthly budget compliance check
+- Export all data as CSV
+
+### 🌍 Market Insights
+Powered by [Financial Modeling Prep](https://financialmodelingprep.com) and [FRED](https://fred.stlouisfed.org/):
+- 📊 Stock quotes for AAPL, MSFT, WMT
+- 📈 U.S. CPI (Inflation)
+- 🏦 Fed Funds Rate
+- 📉 Unemployment Rate
+- 🧠 Real U.S. GDP (chained 2012 dollars)
+
+### ⚙️ Settings Page
+- Set session-based default budget and savings goal
+- Reset all data with a single click
+
+---
+
+## 🗂️ CSV Format for Upload
+Make sure your file includes the following columns:
+
+```csv
+Date,Amount,Category,Description
+2024-12-01,1200,Income,Paycheck
+2024-12-05,-80,Groceries,Trader Joe's
+```
+
+---
+
+## 📦 Installation
+
 ```bash
-git clone https://github.com/yourusername/smart-budget-tracker.git
+# Clone the repo
+git clone https://github.com/emh2003/smart-budget-tracker.git
 cd smart-budget-tracker
-```
 
-### 🧪 2. Install dependencies:
-```bash
+# (Optional) Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### ▶️ 3. Run the app:
-```bash
+# Run the app
 streamlit run app.py
 ```
 
-
 ---
 
-## 🔐 API Keys Required
-- **FMP (Financial Modeling Prep)**: [Get one here](https://financialmodelingprep.com/developer/docs)
-- **FRED (Federal Reserve Economic Data)**: [Register here](https://fred.stlouisfed.org/docs/api/fred/)
+## 🔐 API Keys (FMP & FRED)
+Store your API keys in `.streamlit/secrets.toml` like this:
 
-Place them in `app.py` under:
-```python
-FMP_API_KEY = "your_fmp_api_key"
-FRED_API_KEY = "your_fred_api_key"
+```toml
+FMP_API_KEY = "your_fmp_key"
+FRED_API_KEY = "your_fred_key"
 ```
 
----
-
-## 📁 Project Structure
-```
-smart-budget-tracker/
-├── app.py
-├── requirements.txt
-├── data/
-│   └── transactions.csv (created automatically)
-└── README.md
-```
+You can get free keys from:
+- [FMP API](https://financialmodelingprep.com/developer)
+- [FRED API](https://fred.stlouisfed.org/docs/api/api_key.html)
 
 ---
 
-## 🌍 Deploy on Streamlit Cloud
-1. Push this repo to GitHub
-2. Go to [Streamlit Cloud](https://streamlit.io/cloud)
-3. Click **New App** and select your repo & `app.py`
-4. Done! 🎉 Share your app URL
+## ☁️ Deploy to Streamlit Cloud
+
+1. Push your repo to GitHub
+2. Visit [Streamlit Cloud](https://streamlit.io/cloud)
+3. Connect your GitHub repo
+4. Set your API keys in **Settings > Secrets**
+5. Deploy and share the app link
 
 ---
 
-## 👩‍💻 Built With
-- [Streamlit](https://streamlit.io/)
-- [Pandas](https://pandas.pydata.org/)
+## 🧑‍💻 Built With
+
+- [Streamlit](https://streamlit.io)
 - [Plotly](https://plotly.com/python/)
-- [FMP API](https://financialmodelingprep.com/)
+- [Pandas](https://pandas.pydata.org/)
+- [Financial Modeling Prep API](https://financialmodelingprep.com)
 - [FRED API](https://fred.stlouisfed.org/)
 
+---
+
+## 📘 License
+
+MIT License. Free to use and adapt.
 ---
 
 ## 📬 Contact
